@@ -16,14 +16,14 @@
 
                 <ng-template #GenresLoadedDropdownItems>
                     <div *ngIf="genres" class="dropdown-menu" aria-labelledby="dropdown">
-                        <a *ngFor="let genre of genres" [routerLink]="['movies', genre]" class="dropdown-item">{{genre}}</a>
+                        <a *ngFor="let genre of genres" [routerLink]="['movies']" [queryParams]="{genre: genre.id}" class="dropdown-item">{{genre.name}}</a>
                     </div>
                 </ng-template>
 
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <input class="form-control mr-sm-2" type="text" placeholder="series/movie title...">
             <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">fa</button>
         </form>

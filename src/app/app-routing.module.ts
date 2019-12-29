@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MoviesSectionComponent } from './movies-section/movies-section.component';
@@ -6,9 +6,8 @@ import { AccountManagementComponent } from './account-management/account-managem
 
 const routes: Routes = [{path: '', redirectTo: 'movies', pathMatch: 'full'},
   {path: 'movie/:id', component: MoviesSectionComponent},
-  {path: 'movies', component: MoviesSectionComponent, children : [
-    {path:':genre', component: MoviesSectionComponent}
-  ]},
+  {path: 'movies/:genre', component: MoviesSectionComponent},
+  {path: 'movies', component: MoviesSectionComponent},
   {path: 'account', component: AccountManagementComponent}
 ];
 
