@@ -1,10 +1,9 @@
 import { movies } from './movies.interface';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 
 import { moviesService } from './movies.service';
-import { FnParam } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-movies-section',
@@ -22,8 +21,8 @@ export class MoviesSectionComponent implements OnInit {
   totalPages: number = 1;
   currentRange: number[] = [];
 
-  fetchMoviesBasedOnGenre = () => {
-    
+  windowScroll() {
+    window.scrollTo({top:0});
   }
 
   setMoviesFromNgService = () => this.moviesService.getTrending(this.currentMediaType)
@@ -50,11 +49,12 @@ export class MoviesSectionComponent implements OnInit {
             this.movies = result.results;
             this.totalPages = result['total_pages'];
             this.currentPage = result['page'];
-            for(let i = Math.max(this.currentPage - 3, 1); i < this.currentPage + 4 && i < this.totalPages; i++) {
+            for(let i = Math.max(this.currentPage - 3, 1); i < this.currentPage + 4 && i < this.totalPages + 1; i++) {
                 this.currentRange.push(i);
             }
             console.log(this);
-          }
+          },
+          error => alert(JSON.stringify(error))
         );
       }
     );
@@ -67,7 +67,7 @@ export class MoviesSectionComponent implements OnInit {
   }
 
   getMoviePoster(path) {
-    return `https://image.tmdb.org/t/p/w600_and_h900_bestv2/${path}`;
+    return this.moviesService.completeImagePath(path);
   }
 
 }

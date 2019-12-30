@@ -1,13 +1,32 @@
-$gray = #fafafa;
+$whitish = #fafafa;
+$grey = #666;
 
 body
-    background $gray !important
+    background $whitish
+    padding-top: 56px
 
 a
     cursor pointer
 
+.card:not(.no-transition)
+    transition transform 0.3s ease, box-shadow 0.3s ease
+    &:hover
+        cursor pointer
+        outline 1px solid $grey
+        outline-offset -2px
+        transform translateY(-5px)
+        box-shadow transparentify(grey, 0.2) 0 3px 25px
+
 .navbar-brand.active, .nav-link.active
-    border-bottom 1px solid #fff;
+    border-bottom 1px solid #fff
+
+.fa
+    font-size 40px !important
+    &:hover
+        color orange
+
+.narrow-text-input
+    width 160px !important
 
 .breadcrumb-item a
     color: #007bff !important;

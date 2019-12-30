@@ -1,3 +1,5 @@
+<span class="fa fa-bookmark"></span>
+
 <div class="container-md">
     <!-- <div class="card text-center my-3">
         <div class="card-header">
@@ -25,51 +27,51 @@
         <nav class="mt-3 mb-4">
             <ol class="breadcrumb">
                 <li *ngFor='let mediaType of mediaTypes' class="breadcrumb-item">
-                    <a (click)="getNewTrendingList(mediaType); window.scrollTo(0,0)" [ngClass]="{'active': currentMediaType === mediaType}">{{ mediaType }}</a>
+                    <a (click)="getNewTrendingList(mediaType)" [ngClass]="{'active': currentMediaType === mediaType}">{{ mediaType }}</a>
                 </li>
             </ol>
         </nav>
     </div>
 
-    <div *ngIf="movies.length == 0" class="my-5 d-flex justify-content-center">
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-    <div *ngIf="movies.length != 0" class="my-5 card-group row">
-        <div class="col-4 mb-4 d-flex align-items-stretch" *ngFor="let movie of movies">
-            <div class="card ">
-                <img [src]="getMoviePoster(movie.poster_path) " class="card-img-top " alt="... ">
-                <div class="card-body ">
-                    <h3 class="card-title ">{{movie.title || movie.original_name}} ({{movie.vote_average}} fa star) </h3>
-                    <small class="my-2 d-block"> Released on {{(movie.release_date || movie.first_air_date) | date :'longDate' }} </small>
-                    <p class="card-text ">{{movie.overview}}</p>
-                </div>
-                <div *ngIf="movie.genres.length != 0" class="card-footer text-right">
-                    <small class="text-muted ">
-                    <span *ngFor="let genre of movie.genres; let i = index"> {{genre}} 
-                        <span *ngIf="i+1 != movie.genres.length">,</span>
-                    </span>
-                    </small>
+    <app-loader-spinner *ngIf="movies.length == 0 else moviesExist"></app-loader-spinner>
+
+    <ng-template #moviesExist>
+        <div *ngIf="movies.length != 0" class="my-5 card-group row">
+            <div class="col-lg-4 col-sm-6 offset-md-0 col-12 mb-4 d-flex align-items-stretch" *ngFor="let movie of movies">
+                <div class="card" [routerLink]="'/movies/' + movie.id">
+                    <img [src]="getMoviePoster(movie.poster_path)" class="card-img-top " alt="... ">
+                    <div class="card-body ">
+                        <h3 class="card-title ">{{movie.title || movie.original_name}} ({{movie.vote_average}} fa star) </h3>
+                        <small class="my-2 d-block"> Released on {{(movie.release_date || movie.first_air_date) | date :'longDate' }} </small>
+                        <p class="card-text ">{{movie.overview}}</p>
+                    </div>
+                    <div *ngIf="movie.genres.length != 0" class="card-footer text-right">
+                        <small class="text-muted ">
+                        <span *ngFor="let genre of movie.genres; let i = index"> {{genre}} 
+                            <span *ngIf="i+1 != movie.genres.length">,</span>
+                        </span>
+                        </small>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </div>
 
-    <nav *ngIf="!trending" aria-label="Page navigation" class="my-5 d-flex justify-content-center">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
+        <nav *ngIf="!trending" aria-label="Page navigation" class="my-5 d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage -1 <= 0 ? 1 : currentPage - 1 }" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
 
-            <li *ngFor="let pageNr of currentRange" [ngClass]='{"active" : pageNr == currentPage}' [routerLink]="['/movies']" [queryParams]="{genre: genre, page: pageNr}" class="page-item"><a class="page-link"> {{pageNr}} </a></li>
+                <li *ngFor="let pageNr of currentRange" [ngClass]='{"active" : pageNr == currentPage}' [routerLink]="['/movies']" [queryParams]="{genre: genre, page: pageNr}" (click)='windowScroll()' class="page-item"><a class="page-link"> {{pageNr}} </a></li>
 
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+                <li class="page-item">
+                    <a class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage + 1 > totalPages ? currentPage : currentPage + 1}" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </ng-template>

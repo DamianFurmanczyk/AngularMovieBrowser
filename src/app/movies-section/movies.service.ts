@@ -37,6 +37,27 @@ export class moviesService {
         )
     }
 
+    getMovieDetails(id: number) {
+        return this.http.get(`${this.apiUrl}/movie/${id}?api_key=${this.apiKey}&language=en-US`);
+    }
+
+    getMovieReviews(id: number) {
+        return this.http.get(`${this.apiUrl}/movie/${id}/reviews?api_key=${this.apiKey}&language=en-US&page=1`);
+    }
+
+    completeImagePath(path) {
+        return `https://image.tmdb.org/t/p/w600_and_h900_bestv2/${path}`;
+      }
+    
+    getMovieCredits(id: number) {
+        return this.http.get(`${this.apiUrl}/movie/${id}/credits?api_key=${this.apiKey}`)
+        // .pipe(
+        //     map(resp => {
+        //         resp['cast'].filter(person => person)
+        //     })
+        // );
+    }
+
     getCategories() {
         return this.http.get<{genres: genre[]}>(`${this.apiUrl}/genre/movie/list?api_key=${this.apiKey}`).pipe(
             tap(result => this.genresMap = result.genres)
