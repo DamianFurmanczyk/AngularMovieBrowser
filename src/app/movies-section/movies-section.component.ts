@@ -59,15 +59,15 @@ export class MoviesSectionComponent implements OnInit {
       }
     );
     
+  }  
+  
+  getMoviePoster(path) {
+    return this.moviesService.completeImagePath(path);
   }
 
   getNewTrendingList(mediaType) {
     this.currentMediaType = mediaType;
     this.setMoviesFromNgService();
-  }
-
-  getMoviePoster(path) {
-    return this.moviesService.completeImagePath(path);
   }
 
 }

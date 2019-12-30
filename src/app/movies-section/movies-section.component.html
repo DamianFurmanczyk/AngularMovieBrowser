@@ -38,6 +38,7 @@
     <ng-template #moviesExist>
         <div *ngIf="movies.length != 0" class="my-5 card-group row">
             <div class="col-lg-4 col-sm-6 offset-md-0 col-12 mb-4 d-flex align-items-stretch" *ngFor="let movie of movies">
+                <!-- <app-movie-card [movie]='movie'></app-movie-card> -->
                 <div class="card" [routerLink]="'/movies/' + movie.id">
                     <img [src]="getMoviePoster(movie.poster_path)" class="card-img-top " alt="... ">
                     <div class="card-body ">
@@ -47,14 +48,13 @@
                     </div>
                     <div *ngIf="movie.genres.length != 0" class="card-footer text-right">
                         <small class="text-muted ">
-                        <span *ngFor="let genre of movie.genres; let i = index"> {{genre}} 
-                            <span *ngIf="i+1 != movie.genres.length">,</span>
+                        <span *ngFor="let genre of movie.genres; let i = index"> {{genre['name'] || genre}} 
+                            <span *ngIf="i+1 != movie.genres.length">, </span>
                         </span>
                         </small>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <nav *ngIf="!trending" aria-label="Page navigation" class="my-5 d-flex justify-content-center">

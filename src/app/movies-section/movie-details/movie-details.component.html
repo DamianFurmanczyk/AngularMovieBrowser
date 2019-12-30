@@ -1,0 +1,106 @@
+<div class="container my-5">
+
+    <div class="d-flex justify-content-center">
+        <app-loader-spinner *ngIf='!movieDetails || !movieCredits || !movieReviews'></app-loader-spinner>
+    </div>
+
+    <div class="row">
+
+        <div *ngIf="movieDetails" class="col-lg-6  col-12">
+            <div class="card no-transition">
+                <img [src]="completeImagePath(movieDetails.poster_path)" class="card-img-top " alt="... ">
+                <div class="card-body ">
+                    <h3 class="card-title ">{{movieDetails.title || movieDetails.original_name}} ({{movieDetails.vote_average}} fa star) </h3>
+                    <small class="my-2 d-block"> Released on {{(movieDetails.release_date || movieDetails.first_air_date) | date :'longDate' }} </small>
+                    <p class="card-text ">{{movieDetails.overview}}</p>
+                </div>
+                <div *ngIf="movieDetails.genres.length != 0" class="card-footer text-right">
+                    <small class="text-muted ">
+                <span *ngFor="let genre of movieDetails.genres; let i = index"> {{genre.name}} 
+                    <span *ngIf="i+1 != movieDetails.genres.length">, </span>
+                </span>
+                </small>
+                </div>
+            </div>
+
+            <ul class="list-group my-4">
+                <li class="list-group-item" *ngIf="movieDetails.homepage">Homepage:
+                    <a [href]='movieDetails.homepage' target='_blank'> {{movieDetails.homepage}} </a></li>
+                <li class="list-group-item">Producers:
+                    <span *ngFor="let prod of movieDetails.production_companies; let i = index"> {{prod.name}}{{i != movieDetails.production_companies.length - 1 ? ',' : ''}} </span>
+                </li>
+                <li class="list-group-item">Budget: {{movieDetails.budget}}$ </li>
+                <li class="list-group-item">Box office: {{movieDetails.revenue}}$ </li>
+            </ul>
+
+        </div>
+
+        <div *ngIf="movieCredits" class="col-lg-6 col-12">
+
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-cast-tab" data-toggle="pill" href="#pills-cast" role="tab" aria-controls="pills-cast" aria-selected="true">Cast</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-crew-tab" data-toggle="pill" href="#pills-crew" role="tab" aria-controls="pills-crew" aria-selected="false">Crew</a>
+                </li>
+                <li class="nav-item" *ngIf="movieReviews.results.length != 0">
+                    <a class="nav-link" id="pills-reviews-tab" data-toggle="pill" href="#pills-reviews" role="tab" aria-controls="pills-reviews" aria-selected="false">Reviews</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-cast" role="tabpanel" aria-labelledby="pills-cast-tab">
+                    <div class="list-group">
+                        <a *ngFor="let cast of movieCredits.cast" class="list-group-item list-group-item-action d-flex">
+                            <img *ngIf="cast.profile_path" [src]="completeImagePath(cast.profile_path)" class="img-thumbnail cast-image rounded float-left" alt="actor image">
+                            <div class="ml-2 my-auto">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1"> {{cast.name}} </h5>
+                                </div>
+                                <p class="mb-1"> {{cast.character}} </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-crew" role="tabpanel" aria-labelledby="pills-crew-tab">
+                    <div class="tab-pane fade show active" id="pills-crew" role="tabpanel" aria-labelledby="pills-crew-tab">
+                        <div class="list-group">
+                            <a *ngFor="let crew of movieCredits.crew" class="list-group-item list-group-item-action d-flex">
+                                <img *ngIf="crew.profile_path" [src]="completeImagePath(crew.profile_path)" class="img-thumbnail cast-image rounded float-left" alt="actor image">
+                                <div class="ml-2 my-auto">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"> {{crew.name}} </h5>
+                                    </div>
+                                    <p class="mb-1"> {{crew.job}} </p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="movieReviews.results.length != 0" class="tab-pane fade" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
+
+                    <div class="list-group">
+                        <a *ngFor="let review of movieReviews.results" class="list-group-item list-group-item-action d-flex">
+
+                            <p *ngIf="review.content.length > 800" class="mb-1">
+                                <b>
+                                        {{review.author}}: 
+                                    </b> 
+                                {{review.content.slice(0,999) + '... '}}
+                                <a [href]='review.url' target ='_blank'>[See full review]</a>
+                        </p>
+                        <p *ngIf="review.content.length <= 800" class="mb-1">
+                            <b>
+                                    {{review.author}}: 
+                                </b> {{review.content}}
+                        </p>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
