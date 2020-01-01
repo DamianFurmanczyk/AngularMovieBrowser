@@ -1,26 +1,6 @@
 <span class="fa fa-bookmark"></span>
 
 <div class="container-md">
-    <!-- <div class="card text-center my-3">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div> -->
 
     <div *ngIf="trending" class="my-5">
         <h1 class="ml-2">Trending</h1>
@@ -33,14 +13,17 @@
         </nav>
     </div>
 
-    <app-loader-spinner *ngIf="movies.length == 0 else moviesExist"></app-loader-spinner>
+    <app-loader-spinner *ngIf="movies.length == 0"></app-loader-spinner>
 
-    <ng-template #moviesExist>
-        <div *ngIf="movies.length != 0" class="my-5 card-group row">
+    <div *ngIf='queryNoResults' class="alert alert-info" role="alert">
+        Nothing found, better luck next time.
+    </div>
+
+    <div *ngIf="movies.length != 0 && !queryNoResults">
+        <div class="my-5 card-group row">
             <div class="col-lg-4 col-sm-6 offset-md-0 col-12 mb-4 d-flex align-items-stretch" *ngFor="let movie of movies">
-                <!-- <app-movie-card [movie]='movie'></app-movie-card> -->
                 <div class="card" [routerLink]="'/movies/' + movie.id">
-                    <img [src]="getMoviePoster(movie.poster_path)" class="card-img-top " alt="... ">
+                    <img [src]="getMoviePoster(movie.poster_path)" class="card-img-top " alt="image not found">
                     <div class="card-body ">
                         <h3 class="card-title ">{{movie.title || movie.original_name}} ({{movie.vote_average}} fa star) </h3>
                         <small class="my-2 d-block"> Released on {{(movie.release_date || movie.first_air_date) | date :'longDate' }} </small>
@@ -60,18 +43,27 @@
         <nav *ngIf="!trending" aria-label="Page navigation" class="my-5 d-flex justify-content-center">
             <ul class="pagination">
                 <li class="page-item">
-                    <a class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage -1 <= 0 ? 1 : currentPage - 1 }" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
+                    <a *ngIf='genre' class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage -1 <= 0 ? 1 : currentPage - 1 }" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                    <a *ngIf='query' class="page-link" [routerLink]="['/movies', 'search', query, currentPage -1 <= 0 ? 1 : currentPage - 1]" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
 
-                <li *ngFor="let pageNr of currentRange" [ngClass]='{"active" : pageNr == currentPage}' [routerLink]="['/movies']" [queryParams]="{genre: genre, page: pageNr}" (click)='windowScroll()' class="page-item"><a class="page-link"> {{pageNr}} </a></li>
+                <li *ngFor="let pageNr of currentRange" [ngClass]='{"active" : pageNr == currentPage}' (click)='windowScroll()' class="page-item">
+                    <a *ngIf='genre' [routerLink]="['/movies']" [queryParams]="{genre: genre, page: pageNr}" class="page-link"> {{pageNr}} </a>
+                    <a *ngIf='query' [routerLink]="['/movies', 'search', query, pageNr]" class="page-link"> {{pageNr}} </a>
+                </li>
 
                 <li class="page-item">
-                    <a class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage + 1 > totalPages ? currentPage : currentPage + 1}" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
+                    <a *ngIf='genre' class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage + 1 > totalPages ? currentPage : currentPage + 1}" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    <a *ngIf='query' class="page-link" [routerLink]="['/movies', 'search', query, currentPage + 1 > totalPages ? currentPage : currentPage + 1]" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             </ul>
         </nav>
-    </ng-template>
+    </div>

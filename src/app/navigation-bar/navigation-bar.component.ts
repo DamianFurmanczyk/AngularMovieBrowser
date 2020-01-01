@@ -10,6 +10,7 @@ import { genre } from './genre.interface';
 })
 export class NavigationBarComponent implements OnInit {
   genres: genre[] = [];
+  query: string = '';
 
   constructor(private moviesService: moviesService) { }
 

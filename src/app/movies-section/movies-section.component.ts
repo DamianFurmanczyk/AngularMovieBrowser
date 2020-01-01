@@ -1,7 +1,7 @@
 import { movies } from './movies.interface';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import { moviesService } from './movies.service';
 
@@ -10,7 +10,7 @@ import { moviesService } from './movies.service';
   templateUrl: './movies-section.component.html',
   styleUrls: ['./movies-section.component.styl']
 })
-export class MoviesSectionComponent implements OnInit {
+export class MoviesSectionComponent implements OnInit{
   mediaTypes: String[] = ['All', 'Movie', 'Tv'];
   currentMediaType: String = 'All';
   sub: Subscription;
@@ -20,6 +20,8 @@ export class MoviesSectionComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   currentRange: number[] = [];
+  query: string = '';
+  queryNoResults: boolean = false;
 
   windowScroll() {
     window.scrollTo({top:0});
@@ -28,12 +30,42 @@ export class MoviesSectionComponent implements OnInit {
   setMoviesFromNgService = () => this.moviesService.getTrending(this.currentMediaType)
   .subscribe(resp => this.movies = resp.results);
 
-  constructor(private moviesService: moviesService, private route: ActivatedRoute) { }
+  constructor(private moviesService: moviesService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+
+
+    this.route.params.subscribe(params => {
+
+      if(params.query) {
+        this.query = params.query;
+
+        console.log(this.query);
+  
+        this.moviesService.getMoviesIncludingQuery(params.query, params.page || 1).subscribe(
+          resp => {
+            console.log(resp);
+
+            if(resp.total_results == 0) {
+              this.trending = false;
+              return this.queryNoResults = true;
+            }
+            
+            this.queryNoResults = false;
+            this.movies = resp['results'];
+            this.trending = false;
+            this.addPaginationFunctionality(resp['total_pages'], resp['page'], resp.results);
+            return;
+          }
+        );
+      }
+
+    });
+
+
     this.route.queryParams.subscribe(
       queryParams => {
-        console.log(queryParams.genre);
+
         if(queryParams.genre == undefined) {
           this.trending = true;
           return this.setMoviesFromNgService();
@@ -44,22 +76,27 @@ export class MoviesSectionComponent implements OnInit {
   
         this.moviesService.getByGenre(this.genre, this.currentPage).subscribe(
           result => {
-            console.log(result)
-            this.currentRange = [];
-            this.movies = result.results;
-            this.totalPages = result['total_pages'];
-            this.currentPage = result['page'];
-            for(let i = Math.max(this.currentPage - 3, 1); i < this.currentPage + 4 && i < this.totalPages + 1; i++) {
-                this.currentRange.push(i);
-            }
+            this.addPaginationFunctionality(result['total_pages'], result['page'], result.results);
+
             console.log(this);
           },
           error => alert(JSON.stringify(error))
         );
+        
       }
     );
     
-  }  
+  }
+
+  addPaginationFunctionality(totalPages: number, currentPage: number, movies: movies[]) {
+    this.movies = movies;
+    this.currentRange = [];
+    this.totalPages = totalPages;
+    this.currentPage = currentPage;
+    for(let i = Math.max(this.currentPage - 3, 1); i < this.currentPage + 4 && i < this.totalPages + 1; i++) {
+      this.currentRange.push(i);
+  }
+  }
   
   getMoviePoster(path) {
     return this.moviesService.completeImagePath(path);

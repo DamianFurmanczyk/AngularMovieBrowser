@@ -6,6 +6,8 @@ import { AccountManagementComponent } from './account-management/account-managem
 import { MovieDetailsComponent } from './movies-section/movie-details/movie-details.component';
 
 const routes: Routes = [{path: '', redirectTo: 'movies', pathMatch: 'full'},
+  {path: 'movies/search/:query/:page', component: MoviesSectionComponent},
+  {path: 'movies/search/:query', component: MoviesSectionComponent},
   {path: 'movies/:id', component: MovieDetailsComponent},
   {path: 'movies/:genre', component: MoviesSectionComponent},
   {path: 'movies', component: MoviesSectionComponent},

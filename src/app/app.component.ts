@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {moviesService} from './movies-section/movies.service';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +7,10 @@ import {moviesService} from './movies-section/movies.service';
 })
 
 export class AppComponent implements OnInit  {
-  title = 'movieBrowser';
 
-  constructor(private movieService: moviesService) {
-
+  constructor() {
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    console.log(this.movieService.apiKey + ' dope')
   }
 }

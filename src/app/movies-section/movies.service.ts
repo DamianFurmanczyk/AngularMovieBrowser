@@ -45,6 +45,12 @@ export class moviesService {
         return this.http.get(`${this.apiUrl}/movie/${id}/reviews?api_key=${this.apiKey}&language=en-US&page=1`);
     }
 
+    getMoviesIncludingQuery(query: String, page: Number = 1) {
+        return this.http.get(`${this.apiUrl}/search/movie?api_key=${this.apiKey}&query=${query}&page=${page}`).pipe(
+            map(this.mappingGenresIdsToNames)
+        );
+    }
+
     completeImagePath(path) {
         return `https://image.tmdb.org/t/p/w600_and_h900_bestv2/${path}`;
       }
