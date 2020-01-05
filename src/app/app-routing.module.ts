@@ -5,6 +5,7 @@ import { MoviesSectionComponent } from './movies-section/movies-section.componen
 import { AccountManagementComponent } from './account-management/account-management.component';
 import { MovieDetailsComponent } from './movies-section/movie-details/movie-details.component';
 import { SignInAndUpFormComponent } from './account-management/sign-in-and-up-form/sign-in-and-up-form.component';
+import { authRouteProtection } from './account-management/authRouteProtection.service';
 
 const routes: Routes = [{path: '', redirectTo: 'movies', pathMatch: 'full'},
   {path: 'search/:query/:page', component: MoviesSectionComponent},
@@ -13,7 +14,7 @@ const routes: Routes = [{path: '', redirectTo: 'movies', pathMatch: 'full'},
   {path: 'movies/:genre', component: MoviesSectionComponent},
   {path: 'movies', component: MoviesSectionComponent},
   {path: 'signIn', component: SignInAndUpFormComponent},
-  {path: 'account', component: AccountManagementComponent},
+  {path: 'account', canActivate: [authRouteProtection], component: AccountManagementComponent},
   {path: '**', redirectTo: 'movies'}
 ];
 

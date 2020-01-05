@@ -1,8 +1,10 @@
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, pipe, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { toArray } from 'lodash'
+
 
 import { User } from './User.model';
 
@@ -21,6 +23,15 @@ export class authService {
 
     constructor(private db: AngularFireDatabase, private http: HttpClient) {
         this.user.subscribe(user => this.userReturned = user);
+    }
+
+    getUsersLists():Observable<any> {
+        return this.db.list(`lists/${this.userReturned.uid}/`).snapshotChanges()
+        .pipe(map(items => items.reduce((currentVal, item) => {
+                currentVal[item.payload.key] = toArray(item.payload.val())
+                return currentVal;
+            }, {})
+        ));
     }
 
     addToList(listType:string, data) {

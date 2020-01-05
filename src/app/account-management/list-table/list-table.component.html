@@ -1,0 +1,33 @@
+<h4 *ngIf='!list' class="text-center mt-5">
+    This list is empty.
+</h4>
+<table *ngIf='list' class="table table-hover mt-3 text-center">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Voting</th>
+            <th scope="col">Length</th>
+            <th scope="col">Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr (click)='goToPosDetails(pos.id, $event)' *ngFor="let pos of list">
+            <td>
+                {{pos.title || pos.original_title}}
+            </td>
+            <td>
+                {{pos.status || "No information"}}
+            </td>
+            <td>
+                {{pos.vote_average || "No information"}}
+            </td>
+            <td>
+                {{pos.runtime + 'm' || "No information"}}
+            </td>
+            <td>
+                <span (click)="deleteItemDb(listName, pos.title || pos.original_title)" class="fa fa-times-circle-o"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

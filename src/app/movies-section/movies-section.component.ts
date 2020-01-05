@@ -1,7 +1,6 @@
 import { movies } from './movies.interface';
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 
 import { moviesService } from './movies.service';
 
@@ -13,7 +12,6 @@ import { moviesService } from './movies.service';
 export class MoviesSectionComponent implements OnInit{
   mediaTypes: String[] = ['All', 'Movie', 'Tv'];
   currentMediaType: String = 'All';
-  sub: Subscription;
   movies: movies[] = [];
   genre: String = '';
   trending: boolean = true;

@@ -31,11 +31,11 @@ export class NavigationBarComponent implements OnInit {
   }
 
   logOut() {
-      this.authService.logOut();
+    this.authService.logOut();
+    this.router.url.endsWith('/account') && this.router.navigate(['/movies']);
   }
 
   proceedToSearch() {
-    console.log(!this.query);
     if(!this.query) {
       return this.onError.emit('Title field must not be empty!')
     }

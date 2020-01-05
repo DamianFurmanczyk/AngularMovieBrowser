@@ -1,5 +1,3 @@
-<span class="fa fa-bookmark"></span>
-
 <div class="container-md">
 
     <div *ngIf="trending" class="my-5">
@@ -25,7 +23,7 @@
                 <div class="card" [routerLink]="'/movies/' + movie.id">
                     <img [src]="getMoviePoster(movie.poster_path)" class="card-img-top " alt="image not found">
                     <div class="card-body ">
-                        <h3 class="card-title ">{{movie.title || movie.original_name}} ({{movie.vote_average}} fa star) </h3>
+                        <h3 class="card-title ">{{movie.title || movie.original_name}} ({{movie.vote_average}}) </h3>
                         <small class="my-2 d-block"> Released on {{(movie.release_date || movie.first_air_date) | date :'longDate' }} </small>
                         <p class="card-text ">{{movie.overview}}</p>
                     </div>
