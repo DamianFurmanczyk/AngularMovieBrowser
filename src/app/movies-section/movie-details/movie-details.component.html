@@ -7,6 +7,20 @@
     <div class="row">
 
         <div *ngIf="movieDetails" class="col-lg-6  col-12">
+
+            <div *ngIf='user' class="mb-3 dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add to list...
+                </button>
+                <div class="dropdown-menu addToLists" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="addToList('planToWatch')">Plan to watch</a>
+                    <a class="dropdown-item" (click)="addToList('watching')">Watching</a>
+                    <a class="dropdown-item" (click)="addToList('completed')">Completed</a>
+                    <a class="dropdown-item" (click)="addToList('dropped')">Dropped</a>
+                </div>
+            </div>
+            <!-- <div class="clearfix"></div> -->
+
             <div class="card no-transition">
                 <img [src]="completeImagePath(movieDetails.poster_path)" class="card-img-top " alt="image not found">
                 <div class="card-body ">

@@ -15,8 +15,8 @@
 
     <app-loader-spinner *ngIf="movies.length == 0"></app-loader-spinner>
 
-    <div *ngIf='queryNoResults' class="alert alert-info" role="alert">
-        Nothing found, better luck next time.
+    <div *ngIf='queryNoResults' class="alert alert-info col-8 offset-2 text-center" role="alert">
+        Nothing found.
     </div>
 
     <div *ngIf="movies.length != 0 && !queryNoResults">
@@ -46,21 +46,21 @@
                     <a *ngIf='genre' class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage -1 <= 0 ? 1 : currentPage - 1 }" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
-                    <a *ngIf='query' class="page-link" [routerLink]="['/movies', 'search', query, currentPage -1 <= 0 ? 1 : currentPage - 1]" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
+                    <a *ngIf='query' class="page-link" [routerLink]="['/search', query, currentPage -1 <= 0 ? 1 : currentPage - 1]" (click)="currentPage -1 <= 0 || windowScroll()" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
 
                 <li *ngFor="let pageNr of currentRange" [ngClass]='{"active" : pageNr == currentPage}' (click)='windowScroll()' class="page-item">
                     <a *ngIf='genre' [routerLink]="['/movies']" [queryParams]="{genre: genre, page: pageNr}" class="page-link"> {{pageNr}} </a>
-                    <a *ngIf='query' [routerLink]="['/movies', 'search', query, pageNr]" class="page-link"> {{pageNr}} </a>
+                    <a *ngIf='query' [routerLink]="['/search', query, pageNr]" class="page-link"> {{pageNr}} </a>
                 </li>
 
                 <li class="page-item">
                     <a *ngIf='genre' class="page-link" [routerLink]="['/movies']" [queryParams]="{genre: genre, page: currentPage + 1 > totalPages ? currentPage : currentPage + 1}" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
-                    <a *ngIf='query' class="page-link" [routerLink]="['/movies', 'search', query, currentPage + 1 > totalPages ? currentPage : currentPage + 1]" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
+                    <a *ngIf='query' class="page-link" [routerLink]="['/search', query, currentPage + 1 > totalPages ? currentPage : currentPage + 1]" aria-label="Next" (click)="currentPage + 1 > totalPages || windowScroll()">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

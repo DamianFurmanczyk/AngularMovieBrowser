@@ -1,0 +1,41 @@
+<form #form="ngForm" (ngSubmit)="form.form.valid && submitForm(form)" class='d-flex flex-column justify-content-center col-10 offset-1 col-xl-4 offset-xl-4 col-md-6 offset-md-3'>
+
+    <div *ngIf="errorMsg" class="alert alert-warning fade show" role="alert">
+        {{errorMsg}}
+        <button type="button" (click)="errorMsg=''; timeout = null" class="close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" [ngClass]="{'invalid' : form.submitted && email.invalid || email.touched && email.invalid}" #email="ngModel" name="email" required email ngModel class="form-control" id="email">
+
+        <small class="error-msg" *ngIf="form.submitted && email.errors || email.touched && email.errors"><span *ngIf="email.errors?.required">Email is required.</span>
+            <span *ngIf="email.errors?.email">Given value is not a valid email.</span>
+        </small>
+
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" [ngClass]="{invalid : form.submitted && password.invalid || password.touched && password.invalid}" #password="ngModel" required minlength="6" name="password" ngModel class="form-control" id="password">
+
+        <small class="error-msg" *ngIf="form.submitted && password.errors || password.touched && password.errors">Password <span *ngIf="password.errors?.required">is required.</span>
+                <span *ngIf="password.errors?.minlength">needs to be at least 6 characters long.</span>
+        </small>
+
+    </div>
+
+    <button type="submit" style="width: 120px; margin-left: auto" class="btn btn-info">
+        {{loginFlag ? 'Login' : 'Register'}}
+    </button>
+
+    <br>
+
+    <small>
+        <a class="text-info" (click)='loginFlag = !loginFlag'>
+            {{loginFlag ? 'Dont have account? Register >' : 'Sign in >'}}
+        </a>
+    </small>
+</form>

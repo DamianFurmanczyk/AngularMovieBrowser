@@ -1,2 +1,5 @@
-<app-navigation-bar></app-navigation-bar>
+<app-navigation-bar (onError)="displayError($event)"></app-navigation-bar>
+<div *ngIf='errorMessage' class=" my-4 alert alert-info col-8 offset-2 text-center" role="alert">
+    {{errorMessage}} <span class='pull-right d-block' (click)="errorMessage = ''">x</span>
+</div>
 <router-outlet></router-outlet>

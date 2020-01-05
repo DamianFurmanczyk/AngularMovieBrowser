@@ -1,7 +1,9 @@
+import { authService } from './../../account-management/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { moviesService } from '../movies.service';
+import { User } from './../../account-management/User.model';
 
 @Component({
   selector: 'app-movie-details',
@@ -12,10 +14,16 @@ export class MovieDetailsComponent implements OnInit {
   movieDetails;
   movieReviews;
   movieCredits;
+  user: User | null = null;
 
-  constructor(private moviesService: moviesService, private ActivatedRoute: ActivatedRoute) { }
+  constructor(private authService: authService, private moviesService: moviesService, private ActivatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.authService.user.subscribe(
+      user => this.user = user 
+    );
+
     this.ActivatedRoute.params.subscribe(
       params  => {
 
@@ -23,11 +31,14 @@ export class MovieDetailsComponent implements OnInit {
         this.moviesService.getMovieReviews(params.id).subscribe(resp => this.movieReviews = resp)
         this.moviesService.getMovieCredits(params.id).subscribe(resp => this.movieCredits = resp)
 
-        setTimeout(
-          () => console.log(this), 1000)
-
+        setTimeout(() => 
+        console.log(this.movieDetails), 1000)
       }
     );
+  }
+
+  addToList(listType: string) {
+    this.authService.addToList(listType, this.movieDetails);
   }
 
   completeImagePath(path) {

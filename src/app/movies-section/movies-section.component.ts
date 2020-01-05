@@ -30,38 +30,9 @@ export class MoviesSectionComponent implements OnInit{
   setMoviesFromNgService = () => this.moviesService.getTrending(this.currentMediaType)
   .subscribe(resp => this.movies = resp.results);
 
-  constructor(private moviesService: moviesService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private moviesService: moviesService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-
-
-    this.route.params.subscribe(params => {
-
-      if(params.query) {
-        this.query = params.query;
-
-        console.log(this.query);
-  
-        this.moviesService.getMoviesIncludingQuery(params.query, params.page || 1).subscribe(
-          resp => {
-            console.log(resp);
-
-            if(resp.total_results == 0) {
-              this.trending = false;
-              return this.queryNoResults = true;
-            }
-            
-            this.queryNoResults = false;
-            this.movies = resp['results'];
-            this.trending = false;
-            this.addPaginationFunctionality(resp['total_pages'], resp['page'], resp.results);
-            return;
-          }
-        );
-      }
-
-    });
-
 
     this.route.queryParams.subscribe(
       queryParams => {
@@ -84,7 +55,37 @@ export class MoviesSectionComponent implements OnInit{
         );
         
       }
-    );
+    );  
+
+    this.route.params.subscribe(params => {
+      console.log(params);
+      if(params.query) {
+        this.query = params.query;
+
+        console.log(this.query);
+  
+        this.moviesService.getMoviesIncludingQuery(params.query, params.page || 1).subscribe(
+          resp => {
+            console.log(resp);
+
+            if(resp.total_results == 0) {
+              this.trending = false;
+              return this.queryNoResults = true;
+            }
+
+            this.queryNoResults = false;
+            this.movies = resp['results'];
+            this.trending = false;
+            this.addPaginationFunctionality(resp['total_pages'], resp['page'], resp.results);
+            return;
+          }
+        );
+      }
+
+    });
+
+
+
     
   }
 

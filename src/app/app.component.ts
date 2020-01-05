@@ -7,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class AppComponent implements OnInit  {
+  errorMessage: string = ''
 
   constructor() {
+  }
+
+  displayError(message: string) {
+    this.errorMessage = message;
   }
 
   ngOnInit(): void {

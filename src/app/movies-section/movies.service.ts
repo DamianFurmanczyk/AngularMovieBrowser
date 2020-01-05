@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from "@angular/core";
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +14,9 @@ export class moviesService {
     query = 'shrek';
     apiUrl = 'https://api.themoviedb.org/3';
     genresMap: genre[] = [];
-
+    
+    constructor(private http: HttpClient, private router: Router) {}
+    
     mappingGenresIdsToNames = response => {
         response.results.map(
             movie => {
@@ -29,7 +32,6 @@ export class moviesService {
         return response;
     }
 
-    constructor(private http: HttpClient) {}
 
     getTrending(mediaType: String) {
         return this.http.get<movies>(`${this.apiUrl}/trending/${mediaType}/week?api_key=${this.apiKey}`).pipe(
@@ -46,6 +48,7 @@ export class moviesService {
     }
 
     getMoviesIncludingQuery(query: String, page: Number = 1) {
+        if(!query) this.router.navigate(['/movies']);
         return this.http.get(`${this.apiUrl}/search/movie?api_key=${this.apiKey}&query=${query}&page=${page}`).pipe(
             map(this.mappingGenresIdsToNames)
         );
@@ -56,12 +59,7 @@ export class moviesService {
       }
     
     getMovieCredits(id: number) {
-        return this.http.get(`${this.apiUrl}/movie/${id}/credits?api_key=${this.apiKey}`)
-        // .pipe(
-        //     map(resp => {
-        //         resp['cast'].filter(person => person)
-        //     })
-        // );
+        return this.http.get(`${this.apiUrl}/movie/${id}/credits?api_key=${this.apiKey}`);
     }
 
     getCategories() {
