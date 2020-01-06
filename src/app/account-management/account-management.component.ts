@@ -25,10 +25,6 @@ export class AccountManagementComponent implements OnInit, OnDestroy {
       });
     });
 
-    setTimeout(() => {
-      console.log(this.lists)
-    }, 1000);
-
     this.userSub = this.authService.user.subscribe(user => this.user = user);
   }
 

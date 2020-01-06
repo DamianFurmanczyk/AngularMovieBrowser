@@ -1,5 +1,4 @@
 import { RouterModule, Routes } from '@angular/router';
-import { AppRoutingModule } from './../app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,7 +24,6 @@ const routes: Routes = [{path: '', redirectTo: 'movies', pathMatch: 'full'},
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
         HttpClientModule,
         RouterModule.forChild(routes)
     ]

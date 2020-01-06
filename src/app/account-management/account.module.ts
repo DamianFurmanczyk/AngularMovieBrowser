@@ -1,7 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './../app-routing.module';
 import { NgModule } from '@angular/core';
 
 import { AccountManagementComponent } from './account-management.component';
@@ -21,7 +20,6 @@ const routes: Routes = [
     ListTableComponent
     ],
     imports: [
-        AppRoutingModule,
         BrowserModule,
         FormsModule,
         RouterModule.forChild(routes)

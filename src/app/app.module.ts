@@ -21,7 +21,7 @@ import { MoviesModule } from './movies-section/movies.module';
     AccountModule,
     MoviesModule,
     BrowserModule,
-    RouterModule,
+    RouterModule.forRoot([]),
     HttpClientModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
