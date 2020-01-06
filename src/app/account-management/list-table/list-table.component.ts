@@ -10,12 +10,11 @@ import { authService } from './../auth.service';
 })
 export class ListTableComponent {
   @Input() list;
-  @Input() listName;
 
   constructor(private authService: authService, private router: Router) { }
 
-  deleteItemDb(listType, title) {
-    this.authService.removeFromList(listType, title);
+  deleteItemDb(title) {
+    this.authService.removeFromList(title);
   }
 
   goToPosDetails(id, e) {

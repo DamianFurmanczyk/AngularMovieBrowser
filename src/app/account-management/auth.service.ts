@@ -2,9 +2,7 @@ import { tap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { toArray } from 'lodash'
-
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 
 import { User } from './User.model';
 
@@ -26,26 +24,18 @@ export class authService {
     }
 
     getUsersLists():Observable<any> {
-        return this.db.list(`lists/${this.userReturned.uid}/`).snapshotChanges()
-        .pipe(map(items => items.reduce((currentVal, item) => {
-                currentVal[item.payload.key] = toArray(item.payload.val())
-                return currentVal;
-            }, {})
-        ));
+        return this.db.list(`lists/${this.userReturned.uid}/`).valueChanges();
     }
 
-    addToList(listType:string, data) {
-        console.log(data);
-        this.userReturned && this.db.object(`lists/${this.userReturned.uid}/${listType}/${data.original_title || data.title}`).set(data);
+    addToList(data) {
+        this.userReturned && this.db.object(`lists/${this.userReturned.uid}/${data.original_title || data.title}`).set(data);
     }
 
-    removeFromList(listType: string, key: string) {
-        this.userReturned && this.db.list(`lists/${this.userReturned.uid}/${listType}`).remove(key);
+    removeFromList(key: string) {
+        this.userReturned && this.db.list(`lists/${this.userReturned.uid}`).remove(key);
     }
 
     signInUser (email: string, password: string) {
-        console.log(email)
-        console.log(password)
         return this.http.post<AuthResp>(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${this.apiKey}`, {
             email: email,
             password: password,

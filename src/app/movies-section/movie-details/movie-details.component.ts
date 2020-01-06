@@ -38,7 +38,8 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   addToList(listType: string) {
-    this.authService.addToList(listType, this.movieDetails);
+    this.movieDetails.listType = listType;
+    this.authService.addToList(this.movieDetails);
   }
 
   completeImagePath(path) {

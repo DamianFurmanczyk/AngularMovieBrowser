@@ -11,12 +11,19 @@ import { Subscription } from 'rxjs';
 export class AccountManagementComponent implements OnInit, OnDestroy {
   user: User | null;
   private userSub: Subscription;
-  lists = [];
+  lists = {};
 
   constructor(private authService: authService) { }
 
   ngOnInit() {
-    this.authService.getUsersLists().subscribe(resp => this.lists = resp);
+    this.authService.getUsersLists().subscribe(resp => {
+      this.lists = {};
+      resp.forEach(movie => {
+        console.log(movie);
+        this.lists[movie.listType] = this.lists[movie.listType] ? [...this.lists[movie.listType], movie] : [movie];
+        console.log(this.lists);
+      });
+    });
 
     setTimeout(() => {
       console.log(this.lists)
