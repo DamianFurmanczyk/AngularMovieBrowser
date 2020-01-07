@@ -1,4 +1,4 @@
-import { movies } from './movies.interface';
+import { movieGottenFromApi } from './movie.interface';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 
@@ -12,7 +12,7 @@ import { moviesService } from './movies.service';
 export class MoviesSectionComponent implements OnInit{
   mediaTypes: String[] = ['All', 'Movie', 'Tv'];
   currentMediaType: String = 'All';
-  movies: movies[] = [];
+  movies: movieGottenFromApi[] = [];
   genre: String = '';
   trending: boolean = true;
   currentPage: number = 1;
@@ -45,9 +45,8 @@ export class MoviesSectionComponent implements OnInit{
   
         this.moviesService.getByGenre(this.genre, this.currentPage).subscribe(
           result => {
+            console.log(result);
             this.addPaginationFunctionality(result['total_pages'], result['page'], result.results);
-
-            console.log(this);
           },
           error => alert(JSON.stringify(error))
         );
@@ -56,15 +55,11 @@ export class MoviesSectionComponent implements OnInit{
     );  
 
     this.route.params.subscribe(params => {
-      console.log(params);
       if(params.query) {
         this.query = params.query;
-
-        console.log(this.query);
   
         this.moviesService.getMoviesIncludingQuery(params.query, params.page || 1).subscribe(
           resp => {
-            console.log(resp);
 
             if(resp.total_results == 0) {
               this.trending = false;
@@ -87,7 +82,7 @@ export class MoviesSectionComponent implements OnInit{
     
   }
 
-  addPaginationFunctionality(totalPages: number, currentPage: number, movies: movies[]) {
+  addPaginationFunctionality(totalPages: number, currentPage: number, movies: movieGottenFromApi[]) {
     this.movies = movies;
     this.currentRange = [];
     this.totalPages = totalPages;
