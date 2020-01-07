@@ -1,17 +1,27 @@
-import { User } from './User.model';
-import { authService } from './auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { movieGottenFromApi } from './../movies-section/movie.interface';
+import { User } from './User.model';
+import { authService } from './auth.service';
+
+interface usersLists {
+  planToWatch?: movieGottenFromApi[],
+  watching?: movieGottenFromApi[],
+  completed?: movieGottenFromApi[],
+  dropped?: movieGottenFromApi[]
+}
 
 @Component({
   selector: 'app-account-management',
   templateUrl: './account-management.component.html',
   styleUrls: ['./account-management.component.styl']
 })
+
 export class AccountManagementComponent implements OnInit, OnDestroy {
   user: User | null;
   private userSub: Subscription;
-  lists = {};
+  lists: usersLists = {};
 
   constructor(private authService: authService) { }
 
@@ -19,9 +29,7 @@ export class AccountManagementComponent implements OnInit, OnDestroy {
     this.authService.getUsersLists().subscribe(resp => {
       this.lists = {};
       resp.forEach(movie => {
-        console.log(movie);
         this.lists[movie.listType] = this.lists[movie.listType] ? [...this.lists[movie.listType], movie] : [movie];
-        console.log(this.lists);
       });
     });
 
